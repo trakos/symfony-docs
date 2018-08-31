@@ -168,9 +168,14 @@ handler level or at the channel level instead of registering it globally
     processors implementing :class:`Symfony\\Bridge\\Monolog\\Processor\\ProcessorInterface`
     are automatically registered as services and tagged with ``monolog.processor``,
     so you can use them without adding any configuration. The same applies to the
-    built-in :class:`Symfony\\Bridge\\Monolog\\Processor\\TokenProcessor` and
-    :class:`Symfony\\Bridge\\Monolog\\Processor\\WebProcessor` processors, which
-    can be enabled as follows:
+    built-in processors:
+    
+    * :class:`Symfony\\Bridge\\Monolog\\Processor\\TokenProcessor`
+    * :class:`Symfony\\Bridge\\Monolog\\Processor\\WebProcessor`
+    * :class:`Symfony\\Bridge\\Monolog\\Processor\\RouteProcessor`
+    * :class:`Symfony\\Bridge\\Monolog\\Processor\\ConsoleCommandProcessor`
+    
+    They can be enabled as follows:
 
     .. configuration-block::
 
@@ -182,6 +187,10 @@ handler level or at the channel level instead of registering it globally
                 Symfony\Bridge\Monolog\Processor\TokenProcessor: ~
                 # Adds the real client IP to log entries
                 Symfony\Bridge\Monolog\Processor\WebProcessor: ~
+                # Adds controller::action, route name and parameters
+                Symfony\Bridge\Monolog\Processor\RouteProcessor: ~
+                # Adds command name and arguments
+                Symfony\Bridge\Monolog\Processor\ConsoleCommandProcessor: ~
 
         .. code-block:: xml
 
@@ -197,6 +206,10 @@ handler level or at the channel level instead of registering it globally
                     <service id="Symfony\Bridge\Monolog\Processor\TokenProcessor" />
                     <!-- Adds the real client IP to log entries -->
                     <service id="Symfony\Bridge\Monolog\Processor\WebProcessor" />
+                    <!-- Adds controller::action, route name and parameters -->
+                    <service id="Symfony\Bridge\Monolog\Processor\RouteProcessor" />
+                    <!-- Adds command name and arguments -->
+                    <service id="Symfony\Bridge\Monolog\Processor\ConsoleCommandProcessor" />
                 </services>
             </container>
 
@@ -205,11 +218,17 @@ handler level or at the channel level instead of registering it globally
             // config/services.php
             use Symfony\Bridge\Monolog\Processor\TokenProcessor;
             use Symfony\Bridge\Monolog\Processor\WebProcessor;
+            use Symfony\Bridge\Monolog\Processor\RouteProcessor;
+            use Symfony\Bridge\Monolog\Processor\ConsoleCommandProcessor;
 
             // Adds the current security token to log entries
             $container->register(TokenProcessor::class);
             // Adds the real client IP to log entries
             $container->register(WebProcessor::class);
+            // Adds controller::action, route name and parameters
+            $container->register(RouteProcessor::class);
+            // Adds command name and arguments
+            $container->register(ConsoleCommandProcessor::class);
 
 Registering Processors per Handler
 ----------------------------------
